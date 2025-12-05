@@ -1,9 +1,12 @@
 import os
 from dotenv import load_dotenv
+from langchain_core.prompts import PromptTemplate
 from langchain_huggingface import HuggingFaceEmbeddings
+from langchain_openai.llms import base
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import UnstructuredWordDocumentLoader
 from langchain_chroma import Chroma
+from langchain_openai import ChatOpenAI
 
 # 加载环境变量
 load_dotenv()
@@ -38,16 +41,52 @@ vector_db = Chroma(
 )
 
 # 添加文档
-# vector_db.add_documents(chunks)
+vector_db.add_documents(chunks)
 
-# 查询文档
-docs = vector_db.similarity_search("请假流程",k=2)
-print(docs)
+# 创建提示词
 
-# 删除文档
-vector_db.delete(ids=["1"])
+prompt = PromptTemplate(
+            template="""
+            你是一个智能助手。请基于以下上下文信息回答用户的问题。如果上下文中没有相关信息，请诚实地说明。
 
-# 查询文档
-# docs = vector_db.similarity_search("请假流程",k=2)
-vector_db.query(query_texts=["请假流程"],n_results=2)
-print(docs)
+            上下文信息：
+            {context}
+
+
+            用户问题:
+            {question}
+
+            请提供准确、有帮助的回答:
+            """,
+            input_variables=["context", "question"]
+        )
+
+# 创建检索器
+retriever = vector_db.as_retriever(search_kwargs={"k": 5})
+
+# 查询相关文档
+question = "请假流程是什么"
+
+retrieved_docs = retriever.invoke(question)
+
+
+
+# 将 Document 列表拼接为纯文本上下文
+context = "\n".join(doc.page_content for doc in retrieved_docs)
+print("最终检索的上下文：", retrieved_docs)
+
+
+# 构建完整提示
+full_prompt = prompt.format(
+context=context,
+question=question
+)
+
+print("full_prompt",full_prompt)
+
+# 创建 llm
+llm = ChatOpenAI(api_key=os.getenv("DASHSCOPE_API_KEY"),base_url= os.getenv("DASHSCOPE_BASE_URL"),model=os.getenv("LLM_MODEL"))
+
+# 调用大模型
+answer = llm.invoke(full_prompt).content
+print("答案=",answer)
