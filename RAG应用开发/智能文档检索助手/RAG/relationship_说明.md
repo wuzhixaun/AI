@@ -167,3 +167,5 @@ python relationship_demo.py
 **Q: 不写 relationship 可以吗？**
 - 可以，但你需要手动写 SQL JOIN 查询，代码会更复杂
 
+
+
