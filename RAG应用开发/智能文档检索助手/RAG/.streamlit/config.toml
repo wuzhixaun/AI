@@ -1,0 +1,237 @@
+[global]
+ 
+# 默认情况下，当用户在定义窗口组件的函数中设置了窗口组件默认值，并通过 `st.session_state` 中的窗口组件键设置了窗口组件值时，Streamlit 会显示一个警告。
+# 如果你想关闭此警告，请将其设置为 True。
+# 默认值：false
+disableWidgetStateDuplicationWarning = false
+ 
+# 如果为真，当你运行一个启用了 streamlit 的脚本时会显示一个警告
+# 通过“python my_script.py”。
+# 默认值：true
+showWarningOnDirectExecution = true
+ 
+[logger]
+ 
+# Streamlit 内部日志记录器的日志级别："error"， "warning"，"info"或"debug"。
+# 默认值："info"
+# 可选值：debug（最详细）, info（一般信息）, warning（警告）, error（错误）
+level = "info"
+ 
+# 记录消息的字符串格式。如果日志记录器。设置了 datetimeFormat，
+# 记录器消息默认为' %(asctime)s.%(msecs)03d %(message)s '。
+# 查看 Python 文档了解可用属性：
+# https://docs.python.org/3/library/logging.html formatter-objects
+# 默认值："%(asctime)s %(message)s"
+messageFormat = "%(asctime)s - %(levelname)s - %(message)s"
+ 
+[client]
+ 
+# 控制是否有未捕获的应用异常和弃用警告显示在浏览器中。这可以是下列选项之一。
+#
+#  -“full”：在浏览器中，Streamlit 显示应用已弃用警告和异常，包括异常类型
+# 异常消息和相关的回溯。
+#
+#  -“stacktrace”：在浏览器中，Streamlit 显示异常，包括异常类型、泛型异常消息
+# 以及相关的回溯。弃用警告及完整的异常消息只会打印到控制台。
+#
+#  - "type"：在浏览器中，Streamlit 显示异常类型和通用异常消息。弃用警告，完整
+# 仅包含异常消息和相关的回溯打印到控制台。
+#
+#  - "none"：在浏览器中，Streamlit 显示一般的异常消息。弃用警告，完全例外
+# 消息、关联的回溯和异常类型只会打印到控制台。
+#
+#  - True：已弃用。Streamlit 显示“full”错误详情。
+#  - False：已弃用。Streamlit 显示“stacktrace”错误详情。
+#
+# 默认值：“full”
+showErrorDetails = "full"
+ 
+# 改变工具栏、选项菜单中项目的可见性和设置对话框（app 右上角）。
+# 允许的值：
+#  - "auto"：如果通过应用程序访问，则显示开发者选项 localhost 或者作为开发者通过 Streamlit 社区云。否则隐藏它们。
+#  - "developer"：显示开发者选项。
+#  - “viewer”：隐藏开发者选项。
+#  - “minimal”：只显示外部设置的选项 (例如通过 Streamlit 社区云) 或者通过 st.set_page_config。
+# 如果没有其他选项，隐藏菜单。
+# 默认值：“auto”
+showSidebarNavigation = true
+ 
+[runner]
+ 
+# 允许你在一行中单独输入变量或字符串编写应用程序的 Python 代码
+# 默认值：true
+magicEnabled = true
+ 
+# 立即处理脚本重新运行请求，而不是等待执行脚本以达到屈服点
+# 这使得 Streamlit 对用户交互的响应更加灵敏，但是可能导致应用程序中的竞态条件，从而改变 session_state 数据
+# 避免使用 session_state 赋值语句
+# 默认值：true
+fastReruns = true
+ 
+# 将不可序列化的数据添加到会话状态后引发异常一些执行环境可能需要序列化 Session 中的所有数据 State，因此在开发过程中检测不兼容可能很有用，
+# 或者执行环境将来何时停止支持它。
+# 默认值：false
+enforceSerializableSessionState = false
+ 
+# 调整特定的 ` options ` 组件 ( 如 radio、selectbox 和多选强制枚举成员
+# 当 Enum 类在脚本 rerun 时重新定义时，这很有用。
+#  有关更多信息，请查看文档：
+#  https://docs.streamlit.io/develop/concepts/design/custom-classes 枚举
+# 允许的值：
+#  - "off"：禁用强制枚举。
+#  - "nameOnly": Enum 类的成员名匹配时可以强制转换。
+#  - "nameAndValue": Enum 类的成员名和时可以强制转换
+# 成员值匹配
+# 默认值：“nameOnly”
+enumCoercion = "nameOnly"
+ 
+[server]
+ 
+# 要监视更改的目录列表。
+# 默认情况下，Streamlit 会监视当前工作目录中的文件
+# 及其子目录。使用此选项可指定附加
+# 要监视的目录。路径必须是绝对的。
+# 默认值：[]
+folderWatchList = []
+ 
+# 需要忽略更改的目录列表
+# 默认情况下，Streamlit 会监视当前工作目录中的文件
+# 及其子目录。使用此选项指定内部异常
+# 监视目录。路径可以是绝对的，也可以是相对于当前的工作目录。
+# Example: ['/home/user1/env', 'relative/path/to/folder']
+# Default: []
+folderWatchBlacklist = []
+ 
+# 更改 Streamlit 使用的文件监视器类型，或者完全关闭它。
+# 允许的值：
+#   - "auto": Streamlit 将尝试使用 watchdog 模块，如果 watchdog 不可用，则回退到轮询。
+#   - "watchdog"：强制 Streamlit 使用 watchdog 模块。
+#   - “poll”：强制 Streamlit 始终使用轮询。
+#   - “none”：Streamlit 不会观看文件。
+# Default: "auto"
+fileWatcherType = "auto"
+ 
+# 用于生成签名 cookie 的对称密钥如果部署在多个副本上
+# 则应该将该值设置为相同的值，以确保它们共享相同的密钥。
+# 默认值：随机生成的密钥
+cookieSecret = "a-random-key-appears-here"
+ 
+# 如果为 false，将尝试在开始时打开浏览器窗口。
+# 默认值：false，除非 (1) 在 Linux 机器上未设置 DISPLAY 或
+# (2) 在 Streamlit Atom 插件中运行。
+headless = false
+ 
+# 当磁盘上的文件被修改时，自动重新运行脚本。
+# 默认值：false
+runOnSave = false
+ 
+# 服务器监听客户端和浏览器连接的地址
+# 如果您想将服务器绑定到特定地址，请使用它。
+# 如果设置了，服务器只能从这个地址访问，不能通过任何别名（如 localhost）
+# 默认：（未设置）
+#address =
+ 
+# 服务器监听浏览器连接的端口。
+# 默认值：8501
+port = 8501
+ 
+# 提供 Streamlit 服务的 URL 的基本路径
+# 默认值：“”
+baseUrlPath = ""
+ 
+# 启用跨源资源共享（CORS）保护
+# 增加安全性。
+# 如果同时启用 XSRF 保护和禁用 CORS 保护，Streamlit 将同时启用它们。
+# 默认值：true
+enableCORS = true
+ 
+# Allowed list of origins.
+# If CORS protection is enabled (`server.enableCORS=True`), use this
+# option to set a list of allowed origins that the Streamlit server will
+# accept traffic from.
+# This config option does nothing if CORS protection is disabled.
+# Example: ['http://example.com', 'https://streamlit.io']
+# Default: []
+corsAllowedOrigins = []
+ 
+# 启用跨站请求伪造（XSRF）保护，以增加安全性
+# 如果同时启用 XSRF 保护和禁用 CORS 保护，Streamlit 将同时启用它们。
+# 默认值：true
+enableXsrfProtection = true
+ 
+# Max size, in megabytes, for files uploaded with the file_uploader.
+# Default: 200
+maxUploadSize = 200
+ 
+# 使用 file_uploader 上传的文件的最大大小，单位为 mb。
+# 默认值：200
+maxMessageSize = 200
+ 
+# 启用 websocket 压缩支持
+# 默认值：false
+enableWebsocketCompression = false
+ 
+# 启用正在运行的应用目录中的 `static` 目录下的文件服务。
+# 默认值：false
+enableStaticServing = false
+ 
+# websocket 被断开连接的会话的 TTL（秒数）
+# 对于没有活动 websocket 连接的给定会话，服务器可以选择清理会话状态、上传的文件等。
+# 默认值：120
+disconnectedSessionTTL = 120
+ 
+# 用于 HTTPS 连接的服务器证书文件。
+# 必须与“server.sslKeyFile”同时设置。
+# [` 不要在生产环境中使用此选项。它还没有通过安全审计或性能测试。
+# 对于生产环境，我们建议通过负载均衡器或反向代理执行 SSL 终止。”]
+#sslCertFile =
+ 
+# 用于 HTTPS 连接的加密密钥文件。
+# 必须与“server.sslCertFile”同时设置。
+# [` 不要在生产环境中使用此选项。它还没有通过安全审计或性能测试。
+# 对于生产环境，我们建议通过负载均衡器或反向代理执行 SSL 终止。”]
+# sslKeyFile =
+ 
+[browser]
+ 
+# 用户应该使用浏览器指向的互联网地址
+# 连接到应用程序。可以是 IP 地址或 DNS 名称和路径。
+# 这用于：
+#   - 设置正确的 URL 以保护 CORS 和 XSRF。
+#   - 在终端上显示 URL
+#   - 打开浏览器
+# 默认值：“localhost”
+serverAddress = "localhost"
+ 
+# 是否向 Streamlit 发送使用统计信息。
+# 默认值：true
+gatherUsageStats = false
+ 
+# 将用户的浏览器指向哪个端口以连接应用程序
+# 这用于：
+#   - 设置正确的 URL 以保护 XSRF。
+#   - 在终端上显示 URL （`streamlit run` 的一部分）。
+#   - 自动打开浏览器（`streamlit run` 的一部分）。
+# 此选项适用于高级用例。要更改应用程序的端口，请使用 `server.port`。
+# 默认值：在 server.port 中设置的值。
+# serverPort = 8501
+ 
+[mapbox]
+ 
+# 如果你想使用 Mapbox 而不是 Carto 来显示地图，请使用这个
+# 传递 Mapbox API 令牌。
+# 已弃用。
+# 相反，你应该使用 MAPBOX_API_KEY 环境
+# variable or PyDeck's `api_keys` argument.
+ 
+# 此选项将在 2026-05-01 或之后被删除。
+# 默认值：“”
+# token = ""
+ 
+[secrets]
+ 
+# 搜索秘密的位置列表
+# 条目可以是TOML文件的路径，也可以是保存Kubernetes样式密钥的目录路径。
+# 顺序很重要，导入是最重要的，所以后面的文件中的秘密优先于前面的文件。
+# 默认值：[<本地环境密钥的路径.toml>,<项目秘密的路径.toml>)
+# files = [ "~/.streamlit/secrets.toml", "~/project directory/.streamlit/secrets.toml",]

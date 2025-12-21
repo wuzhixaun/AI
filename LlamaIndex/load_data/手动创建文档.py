@@ -32,5 +32,30 @@ def filename_fn(filename: str):
         "category": Path(filename).suffix,
     }
 
-documents = SimpleDirectoryReader(input_dir="../data", file_metadata=filename_fn).load_data()
-print(documents)
+# 使用绝对路径，更可靠
+# data 目录应该在 LlamaIndex 根目录下
+data_dir = Path(__file__).parent.parent / "data"
+
+# 检查目录是否存在
+if not data_dir.exists():
+    print(f"⚠️  警告: 目录 {data_dir} 不存在")
+    print(f"📁 正在创建目录: {data_dir}")
+    # 创建目录（包括父目录）
+    data_dir.mkdir(parents=True, exist_ok=True)
+    print(f"✅ 目录创建成功！")
+    print(f"💡 提示: 请将需要加载的文件放入 {data_dir} 目录中")
+    print(f"   然后重新运行此脚本即可加载文档")
+else:
+    print(f"📂 正在从目录加载文档: {data_dir}")
+    try:
+        documents = SimpleDirectoryReader(input_dir=str(data_dir), file_metadata=filename_fn).load_data()
+        if documents:
+            print(f"✅ 成功加载 {len(documents)} 个文档:")
+            for i, doc in enumerate(documents, 1):
+                print(f"   {i}. {doc.metadata.get('file_name', '未知文件')}")
+            print(f"\n文档详情:")
+            print(documents)
+        else:
+            print(f"⚠️  目录为空，没有找到任何文件")
+    except Exception as e:
+        print(f"❌ 加载文档时出错: {e}")
